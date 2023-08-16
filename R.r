@@ -47,3 +47,46 @@ $class
      X  Y  Z
 one  2  6 12
 two 20 30 42
+
+> x <- 1:6 # Create x and y values
+> y <- x^2  
+> model <- lm(y ~ x)  # Linear regression model y = A + B * x.
+> summary(model)  # Display an in-depth summary of the model.
+
+Call:
+lm(formula = y ~ x)
+
+Residuals:
+      1       2       3       4       5       6       7       8      9      10
+ 3.3333 -0.6667 -2.6667 -2.6667 -0.6667  3.3333
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)   
+(Intercept)  -9.3333     2.8441  -3.282 0.030453 * 
+x             7.0000     0.7303   9.585 0.000662 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.055 on 4 degrees of freedom
+Multiple R-squared:  0.9583, Adjusted R-squared:  0.9478
+F-statistic: 91.88 on 1 and 4 DF,  p-value: 0.000662
+
+> par(mfrow = c(2, 2))  # Create a 2 by 2 layout for figures.
+> plot(model)  # Output diagnostic plots of the model.
+
+install.packages("caTools")  # install external package
+library(caTools)             # external package providing write.gif function
+jet.colors <- colorRampPalette(c("green", "pink", "#007FFF", "cyan", "#7FFF7F",
+                                 "white", "#FF7F00", "red", "#7F0000"))
+dx <- 1500                    # define width
+dy <- 1400                    # define height
+C  <- complex(real = rep(seq(-2.2, 1.0, length.out = dx), each = dy),
+              imag = rep(seq(-1.2, 1.2, length.out = dy), dx))
+C <- matrix(C, dy, dx)       # reshape as square matrix of complex numbers
+Z <- 0                       # initialize Z to zero
+X <- array(0, c(dy, dx, 20)) # initialize output 3D array
+for (k in 1:20) {            # loop with 20 iterations
+  Z <- Z^2 + C               # the central difference equation
+  X[, , k] <- exp(-abs(Z))   # capture results
+}
+write.gif(X, "Mandelbrot.gif", col = jet.colors, delay = 100)
