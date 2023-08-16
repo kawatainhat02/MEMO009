@@ -64,3 +64,10 @@ class Category {
         "Hello World"
     }
 }
+
+def str = "Hello World"
+def readerClosure = { println str }
+readerClosure()
+def writerClosure = { str = "foo" }
+writerClosure()
+println str
